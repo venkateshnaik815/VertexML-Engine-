@@ -17,6 +17,11 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showNotifs, setShowNotifs] = useState(false);
+  
+  // Settings State
+  const [themePref, setThemePref] = useState('System Default');
+  const [workspacePref, setWorkspacePref] = useState('Default Workspace');
+  const [expFeatures, setExpFeatures] = useState(true);
 
   useEffect(() => { 
     if (isAuthenticated) {
@@ -180,7 +185,7 @@ export default function App() {
   // MAIN DASHBOARD (Only shown if isAuthenticated === true)
   // -------------------------------------------------------------------------
   return (
-    <div className="flex h-screen bg-slate-50 font-sans text-slate-800">
+    <div className={`flex h-screen bg-slate-50 font-sans text-slate-800 ${themePref === 'Dark Mode' ? 'invert hue-rotate-180' : ''}`}>
       
       {/* Settings Modal */}
       {showSettings && (
@@ -193,7 +198,7 @@ export default function App() {
             <div className="p-6 space-y-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Theme Preference</label>
-                <select className="w-full border-slate-300 rounded-lg shadow-sm p-2.5 border">
+                <select value={themePref} onChange={e => setThemePref(e.target.value)} className="w-full border-slate-300 rounded-lg shadow-sm p-2.5 border">
                   <option>System Default</option>
                   <option>Light Mode</option>
                   <option>Dark Mode</option>
@@ -201,14 +206,14 @@ export default function App() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Default Workspace</label>
-                <select className="w-full border-slate-300 rounded-lg shadow-sm p-2.5 border">
+                <select value={workspacePref} onChange={e => setWorkspacePref(e.target.value)} className="w-full border-slate-300 rounded-lg shadow-sm p-2.5 border">
                   <option>Default Workspace</option>
                   <option>Team Alpha</option>
                   <option>Production ML</option>
                 </select>
               </div>
               <div className="flex items-center">
-                <input type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" defaultChecked />
+                <input type="checkbox" checked={expFeatures} onChange={e => setExpFeatures(e.target.checked)} className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
                 <label className="ml-2 block text-sm text-gray-900">Enable Experimental Features</label>
               </div>
             </div>
