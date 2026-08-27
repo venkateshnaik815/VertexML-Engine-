@@ -1,0 +1,31 @@
+package com.vertexml.analytics.controller;
+import com.vertexml.analytics.domain.EnterpriseAnalyticsEntity8;
+import com.vertexml.analytics.service.EnterpriseAnalyticsEntity8Service;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/analytics/8")
+public class EnterpriseAnalyticsEntity8Controller {
+    private final EnterpriseAnalyticsEntity8Service service;
+    public EnterpriseAnalyticsEntity8Controller(EnterpriseAnalyticsEntity8Service service) { this.service = service; }
+    
+    @GetMapping
+    public List<EnterpriseAnalyticsEntity8> getAll() { return service.getAll(); }
+    
+    @GetMapping("/{id}")
+    public EnterpriseAnalyticsEntity8 getById(@PathVariable UUID id) { return service.getById(id); }
+    
+    @PostMapping
+    public EnterpriseAnalyticsEntity8 create(@RequestBody EnterpriseAnalyticsEntity8 entity) { return service.create(entity); }
+    
+    @PutMapping("/{id}")
+    public EnterpriseAnalyticsEntity8 update(@PathVariable UUID id, @RequestBody EnterpriseAnalyticsEntity8 entity) { return service.update(id, entity); }
+    
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable UUID id) { service.delete(id); }
+    
+    @PostMapping("/bulk-process")
+    public void bulkProcess() { service.bulkProcess(); }
+}
