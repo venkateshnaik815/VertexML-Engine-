@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { LayoutDashboard, Database, BrainCircuit, Activity, Plus, Trash2, Search, Bell, Settings, User, X, LogOut, CheckCircle2, Lock, Mail, ArrowRight } from 'lucide-react';
+import { LayoutDashboard, Edit2, Database, BrainCircuit, Activity, Plus, Trash2, Search, Bell, Settings, User, X, LogOut, CheckCircle2, Lock, Mail, ArrowRight } from 'lucide-react';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -426,15 +426,32 @@ export default function App() {
                         </td>
                       </tr>
                     ) : filteredData.map((item: any) => (
-                      <tr key={item.id} className="hover:bg-slate-50/80 transition-colors group">
-                        <td className="px-8 py-5 whitespace-nowrap font-semibold text-slate-700">{item.name}</td>
+                                            <tr key={item.id} className="hover:bg-slate-50/80 transition-colors group">
+                        <td className="px-8 py-5 whitespace-nowrap font-bold text-slate-700">{item.name}</td>
                         <td className="px-8 py-5 whitespace-nowrap">
-                          <span className="px-3 py-1 bg-emerald-100/80 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 flex items-center w-max">
-                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5"></span> Active
-                          </span>
+                          {activeTab === "endpoints" && item.name.includes("stage") ? (
+                            <span className="px-3 py-1 bg-amber-100/80 text-amber-700 text-xs font-bold rounded-full border border-amber-200 flex items-center w-max shadow-sm">
+                              <span className="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5 animate-pulse"></span> Staging
+                            </span>
+                          ) : activeTab === "models" && item.name.includes("V2") ? (
+                            <span className="px-3 py-1 bg-purple-100/80 text-purple-700 text-xs font-bold rounded-full border border-purple-200 flex items-center w-max shadow-sm">
+                              <span className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-1.5 animate-pulse"></span> Training
+                            </span>
+                          ) : activeTab === "datasets" && item.name.includes("Dump") ? (
+                            <span className="px-3 py-1 bg-blue-100/80 text-blue-700 text-xs font-bold rounded-full border border-blue-200 flex items-center w-max shadow-sm">
+                              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-1.5"></span> Syncing
+                            </span>
+                          ) : (
+                            <span className="px-3 py-1 bg-emerald-100/80 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 flex items-center w-max shadow-sm">
+                              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5"></span> Active
+                            </span>
+                          )}
                         </td>
                         <td className="px-8 py-5 whitespace-nowrap text-sm text-slate-400 font-mono">{item.id}</td>
-                        <td className="px-8 py-5 whitespace-nowrap text-right">
+                        <td className="px-8 py-5 whitespace-nowrap text-right space-x-2">
+                          <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100" title="Edit Item">
+                            <Edit2 size={18} />
+                          </button>
                           <button onClick={() => handleDelete(item.id)} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100" title="Delete Item">
                             <Trash2 size={18} />
                           </button>
@@ -451,3 +468,4 @@ export default function App() {
     </div>
   );
 }
+
