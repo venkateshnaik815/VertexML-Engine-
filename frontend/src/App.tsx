@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { LayoutDashboard, Database, BrainCircuit, Activity, Plus, Trash2, Search, Bell, Settings, User, X, LogOut, CheckCircle2 } from 'lucide-react';
+import { LayoutDashboard, Database, BrainCircuit, Activity, Plus, Trash2, Search, Bell, Settings, User, X, LogOut, CheckCircle2, Lock, Mail, ArrowRight } from 'lucide-react';
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
+
   const [activeTab, setActiveTab] = useState('projects');
   const [data, setData] = useState<any[]>([]);
   const [stats, setStats] = useState({ projects: 0, datasets: 0, models: 0, endpoints: 0 });
@@ -14,9 +19,21 @@ export default function App() {
   const [showNotifs, setShowNotifs] = useState(false);
 
   useEffect(() => { 
-    fetchData(); 
-    fetchStats();
-  }, [activeTab]);
+    if (isAuthenticated) {
+      fetchData(); 
+      fetchStats();
+    }
+  }, [activeTab, isAuthenticated]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email && password) {
+      setIsAuthenticated(true);
+      setLoginError(false);
+    } else {
+      setLoginError(true);
+    }
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -62,6 +79,110 @@ export default function App() {
 
   const filteredData = data.filter(d => d.name && d.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
+  // -------------------------------------------------------------------------
+  // LOGIN SCREEN
+  // -------------------------------------------------------------------------
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex bg-white font-sans text-slate-800">
+        {/* Left Side - Brand & Gradient */}
+        <div className="hidden lg:flex lg:w-1/2 bg-slate-900 relative overflow-hidden items-center justify-center">
+          {/* Decorative Background Elements */}
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-indigo-600/20 to-purple-800/40 z-0"></div>
+          <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-indigo-500/20 blur-[120px]"></div>
+          <div className="absolute bottom-[10%] -right-[10%] w-[60%] h-[60%] rounded-full bg-purple-500/20 blur-[100px]"></div>
+          
+          <div className="relative z-10 p-16 max-w-2xl text-center">
+            <div className="w-20 h-20 bg-indigo-600 rounded-2xl flex items-center justify-center font-bold text-white shadow-2xl mx-auto mb-8 shadow-indigo-500/50">
+              <BrainCircuit size={48} />
+            </div>
+            <h1 className="text-4xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+              Enterprise Machine Learning <br/> Platform
+            </h1>
+            <p className="text-lg text-slate-300 leading-relaxed max-w-lg mx-auto">
+              Build, train, and deploy models at scale. Secure your ML workflows with enterprise-grade infrastructure.
+            </p>
+          </div>
+        </div>
+
+        {/* Right Side - Login Form */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-24 bg-slate-50 relative">
+          <div className="w-full max-w-md bg-white p-10 rounded-3xl shadow-xl border border-slate-100">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Welcome back</h2>
+              <p className="text-slate-500 mt-3 text-sm">Please enter your enterprise credentials to access your workspaces.</p>
+            </div>
+            
+            <form onSubmit={handleLogin} className="space-y-6">
+              {loginError && (
+                <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start">
+                  <p className="text-sm text-red-600 font-medium">Please enter a valid email and password to continue.</p>
+                </div>
+              )}
+              
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Work Email</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail size={18} className="text-slate-400" />
+                  </div>
+                  <input 
+                    type="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" 
+                    placeholder="name@company.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-semibold text-slate-700">Password</label>
+                  <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock size={18} className="text-slate-400" />
+                  </div>
+                  <input 
+                    type="password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" 
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center">
+                <input id="remember-me" type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer" />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-600 cursor-pointer">
+                  Remember my device for 30 days
+                </label>
+              </div>
+
+              <button 
+                type="submit" 
+                className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+              >
+                Sign in to VertexML
+                <ArrowRight size={18} className="ml-2" />
+              </button>
+            </form>
+            
+            <div className="mt-8 text-center text-sm text-slate-500">
+              Don't have an enterprise account? <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">Contact IT Admin</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // MAIN DASHBOARD (Only shown if isAuthenticated === true)
+  // -------------------------------------------------------------------------
   return (
     <div className="flex h-screen bg-slate-50 font-sans text-slate-800">
       
@@ -91,7 +212,7 @@ export default function App() {
                 </select>
               </div>
               <div className="flex items-center">
-                <input type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" checked />
+                <input type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" defaultChecked />
                 <label className="ml-2 block text-sm text-gray-900">Enable Experimental Features</label>
               </div>
             </div>
@@ -195,10 +316,10 @@ export default function App() {
             {showProfile && (
               <div className="absolute top-14 right-0 w-56 bg-white border border-slate-200 shadow-xl rounded-xl py-2 z-20">
                 <div className="px-4 py-2 border-b border-slate-100 mb-2">
-                  <p className="font-semibold text-slate-700">venkatesh@vertexml.com</p>
+                  <p className="font-semibold text-slate-700">{email || "admin@vertexml.com"}</p>
                 </div>
                 <button onClick={() => setShowSettings(true)} className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center"><Settings size={16} className="mr-3 text-slate-400" /> Account Settings</button>
-                <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center"><LogOut size={16} className="mr-3 text-red-400" /> Sign out</button>
+                <button onClick={() => setIsAuthenticated(false)} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center"><LogOut size={16} className="mr-3 text-red-400" /> Sign out</button>
               </div>
             )}
           </div>
