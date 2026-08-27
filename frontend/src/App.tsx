@@ -3,7 +3,7 @@ import axios from 'axios';
 import { LayoutDashboard, Database, BrainCircuit, Activity, Plus, Trash2, Search, Bell, Settings, User, X, LogOut, CheckCircle2, Lock, Mail, ArrowRight } from 'lucide-react';
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
