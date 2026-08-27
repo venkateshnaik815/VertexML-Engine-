@@ -29,3 +29,4 @@ public class EnterpriseAnalyticsEntity1Controller {
     @PostMapping("/bulk-process")
     public void bulkProcess() { service.bulkProcess(); }
 }
+// test api
