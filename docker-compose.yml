@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: vertexml-postgres
+    environment:
+      POSTGRES_USER: vertexml_user
+      POSTGRES_PASSWORD: vertexml_password
+      POSTGRES_DB: vertexml_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - vertexml-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: vertexml-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - vertexml-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  vertexml-network:
+    driver: bridge
