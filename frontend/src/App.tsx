@@ -139,7 +139,6 @@ export default function App() {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-semibold text-slate-700">Password</label>
-                  <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">Forgot password?</a>
                 </div>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -171,9 +170,6 @@ export default function App() {
               </button>
             </form>
             
-            <div className="mt-8 text-center text-sm text-slate-500">
-              Don't have an enterprise account? <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">Contact IT Admin</a>
-            </div>
           </div>
         </div>
       </div>
