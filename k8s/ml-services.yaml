@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-services
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ml-services
+  template:
+    metadata:
+      labels:
+        app: ml-services
+    spec:
+      containers:
+      - name: ml-services
+        image: vertexml/ml-services:latest
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ml-services
+spec:
+  ports:
+  - port: 8000
+  selector:
+    app: ml-services

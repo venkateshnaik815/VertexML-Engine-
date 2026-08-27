@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-core
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+      - name: backend-core
+        image: vertexml/backend-core:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres:5432/vertexml_db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-core
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: backend-core
